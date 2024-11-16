@@ -1,7 +1,7 @@
 import random
 
 #this program creates a 20x20 grid of 1s (wall nodes) and 0s (traversable nodes), 
-#each time the program is ran, walls are spanwed randomly on the grid and the position of the start and goal nodes is also randomnly spawned
+#each time the program is ran, walls are spanwed randomly (with a set wall dencity) on the grid and the position of the start and goal nodes is also randomnly spawned - with at least 20 spaces in between
 
 class Grid:
     def __init__(self, rows, cols, wall_density, distance_between_start_goal):
