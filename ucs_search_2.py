@@ -15,8 +15,8 @@ class Grid:
         grid = [[1 if random.random() < 0.15 else 0 for _ in range(self.cols)] for _ in range(self.rows)] #spawns 1 (wall) at a 0.15 chance rate and the rest is 0 (traversable node)
         return grid
 
-    def generate_start_goal(self): #function to set the positions of start and goal nodes 
-        start = (1, 1) #position of start node
+    def set_start_goal(self): #function to set the positions of start and goal nodes 
+        start = (5, 5) #position of start node
         goal = (19, 19) #position of goal node
         return start, goal
 
