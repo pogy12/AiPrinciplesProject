@@ -1,35 +1,32 @@
 import random
 
 #this program creates a 20x20 grid of 1s (wall nodes) and 0s (traversable nodes), 
-#each time the program is ran, walls are spanwed randomly (with a set wall dencity) on the grid and the position of the start and goal nodes is also randomnly spawned - with at least 20 spaces in between
+#each time the program is ran, walls are spanwed randomly on the grid and the position of the start and goal nodes is also randomnly spawned
 
 class Grid:
-    def __init__(self, rows, cols, wall_density, distance_between_start_goal):
+    def __init__(self, rows, cols):
         self.rows = rows
         self.cols = cols
-        self.wall_density = wall_density
-        self.distance_between_start_goal = distance_between_start_goal
         self.grid = self.create_grid()
         self.start, self.goal = self.generate_start_goal()
-        
+        self.generate_ramp()
+
     def create_grid(self): #function to create grid
-        grid = [] #creates empty list for the grid
-        for _ in range(self.rows): #loops 'rows' times, the value is specifed in the main() function
-            row = [1 if random.random() < self.wall_density else 0 for _ in range(self.cols)] #generates a random number between 1 and 0. If number < wall_density add 1 (wall), else 0 (traversable node)
-            grid.append(row) #adds row to the grid
+        random.seed(42) #seed for reproducibility (keeps grid the same every time)
+        grid = [[1 if random.random() < 0.15 else 0 for _ in range(self.cols)] for _ in range(self.rows)] #spawns 1 (wall) at a 0.15 chance rate and the rest is 0 (traversable node)
         return grid
 
-    def generate_start_goal(self): #function to generate random start and goal nodes with at least 20 nodes in between
-        while True:
-            start = random.randint(0, self.rows - 1), random.randint(0, self.cols - 1) #generates random row and col positon for start node
-            goal = random.randint(0, self.rows - 1), random.randint(0, self.cols - 1) #generates random row and col positon for goal node
-            if abs(start[0] - goal[0]) + abs(start[1] - goal[1]) >= self.distance_between_start_goal: #checks the vertical and horizontal distance between start - goal, if >= 'distance_between_start_goal' then accept, else generate new 
-                break #leave the while loop
-
-        #make sure start and goal nodes spawn at a 0 (clear path) not at a 1 (wall)
-        self.grid[start[0]][start[1]] = 0 
-        self.grid[goal[0]][goal[1]] = 0
+    def generate_start_goal(self): #function to set the positions of start and goal nodes 
+        start = (1, 1) #position of start node
+        goal = (19, 19) #position of goal node
         return start, goal
+
+    def generate_ramp(self): #function to generate ramps (cost == 2) on map
+        random.seed(42) #seed for reproducibility (keeps ramp pistion the same every time)
+        for r in range(self.rows): #for each node in row,
+            for c in range(self.cols): #and for each node in column:
+                if self.grid[r][c] == 0 and random.random() < 0.1: #if the current node == 0 and random value is below 0.1:
+                    self.grid[r][c] = 2 #set current node to 2 (traversable node, but costs 2 to traversal)
 
     def display_grid(self): #function to print grid
         print("Start node:", self.start)
@@ -40,9 +37,7 @@ class Grid:
 
 def main():
     rows, cols = 20, 20 #size of grid
-    wall_density = 0.15 #wall density on grid (15% of grid are walls)
-    distance_between_start_goal = 20
-    grid_instance = Grid(rows, cols, wall_density, distance_between_start_goal)
+    grid_instance = Grid(rows, cols)
     grid_instance.display_grid()
 
 if __name__ == "__main__":
