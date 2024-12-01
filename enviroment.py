@@ -8,7 +8,7 @@ class Grid:
         self.rows = rows
         self.cols = cols
         self.grid = self.create_grid()
-        self.start, self.goal = self.generate_start_goal()
+        self.start, self.goal = self.set_start_goal()
         self.generate_ramp()
 
     def create_grid(self): #function to create grid
@@ -16,7 +16,7 @@ class Grid:
         grid = [[1 if random.random() < 0.15 else 0 for _ in range(self.cols)] for _ in range(self.rows)] #spawns 1 (wall) at a 0.15 chance rate and the rest is 0 (traversable node)
         return grid
 
-    def generate_start_goal(self): #function to set the positions of start and goal nodes 
+    def set_start_goal(self): #function to set the positions of start and goal nodes 
         start = (1, 1) #position of start node
         goal = (19, 19) #position of goal node
         return start, goal
