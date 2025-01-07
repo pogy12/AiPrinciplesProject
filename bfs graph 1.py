@@ -166,7 +166,7 @@ class BreadthFirstSearchPlanner:
             rx.append(n.parent.x)
             ry.append(n.parent.y)
             n = n.parent
-            total_cost += 1 if n.cost == 0 else 2
+            total_cost += 1 if self.grid[n.y][n.x] == 0 else 2
         return rx[::-1], ry[::-1], total_cost
 
     def calc_grid_index(self, node):
