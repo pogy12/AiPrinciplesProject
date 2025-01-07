@@ -118,6 +118,8 @@ class BreadthFirstSearchPlanner:
         goal_node = self.Node(gx, gy, 0.0, -1, None)
         open_set, closed_set = dict(), dict()
         open_set[self.calc_grid_index(start_node)] = start_node
+        cost_map = {self.calc_grid_index(start_node): 0}
+
 
         while True:
             if len(open_set) == 0:
@@ -134,9 +136,7 @@ class BreadthFirstSearchPlanner:
             if current.x == goal_node.x and current.y == goal_node.y:
                 print("Found goal!")
                 goal_node.parent_index = current.parent_index  # Set the goal node's parent
-                goal_node.cost = current.cost
                 goal_node.parent = current  # Assign the parent node to goal node
-                print("cost:", goal_node.cost )
                 break
 
             for i, _ in enumerate(self.motion):
@@ -152,19 +152,22 @@ class BreadthFirstSearchPlanner:
                     node.parent = current
                     open_set[n_id] = node
 
-        rx, ry = self.calc_final_path(goal_node)
+        rx, ry, total_cost = self.calc_final_path(goal_node)
+        print(f'total cost: {total_cost}')
         if visualiser:
             visualiser.visualise_shortest_path(list(zip(rx, ry)))
         return rx, ry
 
     def calc_final_path(self, goal_node):
+        total_cost = 0
         rx, ry = [goal_node.x], [goal_node.y]
         n = goal_node
         while n.parent is not None:
             rx.append(n.parent.x)
             ry.append(n.parent.y)
             n = n.parent
-        return rx[::-1], ry[::-1]
+            total_cost += 1 if n.cost == 0 else 2
+        return rx[::-1], ry[::-1], total_cost
 
     def calc_grid_index(self, node):
         return node.y * self.xwidth + node.x
